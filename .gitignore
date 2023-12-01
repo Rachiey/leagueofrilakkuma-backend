@@ -1,0 +1,18 @@
+# Dependencies
+node_modules
+
+# Environment variables
+.env
+
+# OS or Editor-specific files
+.DS_Store
+.vscode/
+*.log
+
+# Build files
+/build
+/dist
+
+# Cache or temporary files
+.cache
+.tmp
