@@ -53,12 +53,12 @@ async function getRandomChampionDetails() {
   
       // Filter core items (depth = 3)
       const coreItems = Object.values(items.data).filter((item) => item.depth === 3);
-      console.log('coreItems', coreItems.length);
+     
   
   
       // Filter mythic items that include 'Mythic Passive' and have a depth of 3
       const mythicItems = coreItems.filter((item) => item.tags && item.description.includes('Mythic Passive:'));
-      console.log('mythicItems', mythicItems.length);
+      
 
       const getLegendaryItems = (items) => {
         // Filter core items (depth = 3)
@@ -97,14 +97,7 @@ async function getRandomChampionDetails() {
       
       // Using the function to filter unwanted items from legendaryItems
       const filteredLegendaryItems = removeUnwantedItems(legendaryItems);
-      
-      console.log('Filtered legendary items:', filteredLegendaryItems.length);
 
-
-
-
-// Log the length of the legendary items array
-console.log('Length of Legendary Items:', legendaryItems.length);
 
       // Pick one mythic item
       const randomMythic = mythicItems[Math.floor(Math.random() * mythicItems.length)];
@@ -162,7 +155,6 @@ console.log('Length of Legendary Items:', legendaryItems.length);
   
   // Example usage
   getRandomItemsForRandomChampion().then((items) => {
-    console.log('Randomized build:', items);
     // Use the items for a champion build or display them to the user
   });
 
