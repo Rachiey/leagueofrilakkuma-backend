@@ -42,6 +42,23 @@ async function getRandomChampionDetails() {
     }
   }
 
+  async function fetchChampionNames() {
+    try {
+      const response = await axios.get('https://ddragon.leagueoflegends.com/cdn/13.23.1/data/en_US/champion.json');
+      const championData = response.data.data;
+      const championNames = Object.values(championData).map(champion => ({
+        name: champion.name,
+      }));
+  
+      return championNames;
+    } catch (error) {
+      console.error('Error fetching champion names:', error);
+      throw new Error('Error fetching champion names');
+    }
+  }
+  
+ 
+
   const getRandomItemsForRandomChampion = async () => {
     try {
       const version = '13.23.1';
@@ -158,7 +175,16 @@ async function getRandomChampionDetails() {
     // Use the items for a champion build or display them to the user
   });
 
-
+  app.get('/fetch-champion', async (req, res) => {
+    try {
+      const championNames = await fetchChampionNames();
+      res.json(championNames);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch champion names' });
+    }
+  });
+  
+  
 app.get('/random-build', async (req, res) => {
     try {
       const randomBuild = await getRandomItemsForRandomChampion();
