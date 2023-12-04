@@ -46,18 +46,18 @@ async function getRandomChampionDetails() {
     try {
       const response = await axios.get('https://ddragon.leagueoflegends.com/cdn/13.23.1/data/en_US/champion.json');
       const championData = response.data.data;
-      const championNames = Object.values(championData).map(champion => ({
+      const champions = Object.values(championData).map(champion => ({
         name: champion.name,
+        image: `https://ddragon.leagueoflegends.com/cdn/13.23.1/img/champion/${champion.image.full}`, // Adjust the URL structure as needed
       }));
   
-      return championNames;
+      return champions;
     } catch (error) {
-      console.error('Error fetching champion names:', error);
-      throw new Error('Error fetching champion names');
+      console.error('Error fetching champion data:', error);
+      throw new Error('Error fetching champion data');
     }
   }
   
- 
 
   const getRandomItemsForRandomChampion = async () => {
     try {
@@ -184,7 +184,7 @@ async function getRandomChampionDetails() {
     }
   });
   
-  
+
 app.get('/random-build', async (req, res) => {
     try {
       const randomBuild = await getRandomItemsForRandomChampion();
