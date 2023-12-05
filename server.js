@@ -70,23 +70,20 @@ async function getRandomChampionDetails() {
   
       // Filter core items (depth = 3)
       const coreItems = Object.values(items.data).filter((item) => item.depth === 3);
-     
-  
-  
-      // Filter mythic items that include 'Mythic Passive' and have a depth of 3
-      const mythicItems = coreItems.filter((item) => item.tags && item.description.includes('Mythic Passive:'));
-      
 
+      const mythicItems = coreItems
+      .filter((item) => item.tags && item.description.includes('Mythic Passive:'))
+      .map((item) => (item.name === 'Edge of Finality' ? { ...item, name: 'Infinity Edge' } : item));
+
+    
       const getLegendaryItems = (items) => {
         // Filter core items (depth = 3)
         const coreItems = Object.values(items.data).filter((item) => item.depth === 3);
       
-        // Filter mythic items that include 'Mythic Passive' and have a depth of 3
-        const mythicItems = coreItems.filter((item) => item.tags && item.description.includes('Mythic Passive:'));
-      
         // Exclude mythic items to get legendary items
-        const legendaryItems = coreItems.filter((item) => !mythicItems.includes(item));
-    
+        const legendaryItems = coreItems.filter((item) => !mythicItems.some((mythicItem) => mythicItem.name === item.name))
+                                         .map((item) => (item.name === 'Edge of Finality' ? { ...item, name: 'Infinity Edge' } : item));
+      
         return legendaryItems;
       };
 
@@ -103,12 +100,20 @@ async function getRandomChampionDetails() {
           "Spectral Cutlass",
           "Sword of the Divine",
           "The Golden Spatula",
-          "Zephyr"
+          "Zephyr",
+          "Guardian Angel",
+          "Mejai's Soulstealer",
+          "Hullbreaker",
+          "Sword of Blossoming Dawn",
+          "Frozen Mallet",
+          "Lightning Braid",
+          "Hellfire Hatchet",
+          "Perplexity",
+          "Vigilant Wardstone",
+          "Worldless Promise"
         ];
       
         const excludedItems = items.filter((item) => unwantedNames.includes(item.name));
-
-      
         return items.filter((item) => !unwantedNames.includes(item.name));
       };
       
@@ -116,9 +121,6 @@ async function getRandomChampionDetails() {
       const filteredLegendaryItems = removeUnwantedItems(legendaryItems);
 
 
-      // Pick one mythic item
-      const randomMythic = mythicItems[Math.floor(Math.random() * mythicItems.length)];
-  
       // Pick 5 more random core items excluding the chosen mythic item
       const specificBoots = [
         "Berserker's Greaves",
@@ -141,32 +143,44 @@ async function getRandomChampionDetails() {
       // Shuffling the legendaryItems array
       const shuffledLegendaryItems = shuffleArray(filteredLegendaryItems);
       
-      const selectedItems = [];
-  
-      // Pick one random boot
-      const specificBootName = specificBoots[Math.floor(Math.random() * specificBoots.length)];
-      const specificBootImageUrl = await getSpecificBootImage(specificBootName);
-  
-      selectedItems.push({ name: specificBootName, image: specificBootImageUrl });
-      selectedItems.push({ name: randomMythic.name, image: `https://ddragon.leagueoflegends.com/cdn/${version}/img/item/${randomMythic.image.full}` });
-  
-      // Assuming randomNonMythicItems is an array of objects with name and image properties
-      for (let i = 0; i < 4; i++) {
-        if (shuffledLegendaryItems[i]) {
-          selectedItems.push({
-            name: shuffledLegendaryItems[i].name,
-            image: `https://ddragon.leagueoflegends.com/cdn/${version}/img/item/${shuffledLegendaryItems[i].image.full}`
-          });
-        }
-      }
       
-      // Return the final build array including boots, mythic item, and non-mythic random items
-      return selectedItems;
-    } catch (error) {
-      console.error('Error fetching item data:', error);
-      throw new Error('Error fetching item data');
+    const selectedItems = [];
+
+    // Pick one mythic item
+    const randomMythic = mythicItems[Math.floor(Math.random() * mythicItems.length)];
+
+    // Add mythic item as the first item
+    selectedItems.push({
+      name: randomMythic.name,
+      image: `https://ddragon.leagueoflegends.com/cdn/${version}/img/item/${randomMythic.image.full}`
+    });
+
+    // Pick one random boot
+    const specificBootName = specificBoots[Math.floor(Math.random() * specificBoots.length)];
+    const specificBootImageUrl = await getSpecificBootImage(specificBootName);
+
+    // Add boots as the second item
+    selectedItems.push({ name: specificBootName, image: specificBootImageUrl });
+
+    // Assuming randomNonMythicItems is an array of objects with name and image properties
+    for (let i = 0; i < 4; i++) {
+      if (shuffledLegendaryItems[i]) {
+        selectedItems.push({
+          name: shuffledLegendaryItems[i].name,
+          image: `https://ddragon.leagueoflegends.com/cdn/${version}/img/item/${shuffledLegendaryItems[i].image.full}`
+        });
+      }
     }
-  };
+
+    console.log('Selected Items:', selectedItems);
+
+    // Return the final build array including boots, mythic item, and non-mythic random items
+    return selectedItems;
+  } catch (error) {
+    console.error('Error fetching item data:', error);
+    throw new Error('Error fetching item data');
+  }
+};
   
 
   
