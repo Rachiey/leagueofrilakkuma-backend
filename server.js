@@ -71,6 +71,8 @@ async function getRandomChampionDetails() {
       // Filter core items (depth = 3)
       const coreItems = Object.values(items.data).filter((item) => item.depth === 3);
 
+ 
+
       const mythicItems = coreItems
       .filter((item) => item.tags && item.description.includes('Mythic Passive:'))
       .map((item) => (item.name === 'Edge of Finality' ? { ...item, name: 'Infinity Edge' } : item));
@@ -113,7 +115,9 @@ async function getRandomChampionDetails() {
           "Worldless Promise"
         ];
       
-        const excludedItems = items.filter((item) => unwantedNames.includes(item.name));
+        // const excludedItems = items.filter((item) => unwantedNames.includes(item.name));
+
+        // console.log(excludedItems)
         return items.filter((item) => !unwantedNames.includes(item.name));
       };
       
@@ -142,7 +146,7 @@ async function getRandomChampionDetails() {
       
       // Shuffling the legendaryItems array
       const shuffledLegendaryItems = shuffleArray(filteredLegendaryItems);
-      
+
       
     const selectedItems = [];
 
