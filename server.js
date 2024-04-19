@@ -116,7 +116,7 @@ const getRandomItemsForRandomChampion = async () => {
     ];
     const specificBootName = specificBoots[Math.floor(Math.random() * specificBoots.length)];
     const specificBootImageUrl = await getSpecificBootImage(specificBootName);
-    selectedItems.splice(0, 0, { name: specificBootName, image: specificBootImageUrl });
+    selectedItems.splice(1, 0, { name: specificBootName, image: specificBootImageUrl }); // Insert boots at index 1
 
     console.log('Selected Items:', selectedItems);
 
