@@ -94,14 +94,18 @@ const getRandomItemsForRandomChampion = async () => {
     ];
     const filteredItems = coreItems.filter(item => !unwantedNames.includes(item.name));
 
-    // Pick 5 random items
+    // Pick 5 unique random items
     const selectedItems = [];
-    for (let i = 0; i < 5; i++) {
+    const selectedIndices = new Set(); // Set to store selected indices
+    while (selectedItems.length < 5) {
       const randomIndex = Math.floor(Math.random() * filteredItems.length);
-      selectedItems.push({
-        name: filteredItems[randomIndex].name,
-        image: `https://ddragon.leagueoflegends.com/cdn/${version}/img/item/${filteredItems[randomIndex].image.full}`
-      });
+      if (!selectedIndices.has(randomIndex)) {
+        selectedItems.push({
+          name: filteredItems[randomIndex].name,
+          image: `https://ddragon.leagueoflegends.com/cdn/${version}/img/item/${filteredItems[randomIndex].image.full}`
+        });
+        selectedIndices.add(randomIndex); // Add index to set
+      }
     }
 
     // Pick one random boot
